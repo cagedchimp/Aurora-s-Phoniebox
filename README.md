@@ -16,3 +16,4 @@ A kid-friendly RFID jukebox built on the [RPi-Jukebox-RFID](https://github.com/M
 ## Documents
 
 - [Battery / portability plan](docs/battery-plan.md)
+- [Bluetooth setup notes](docs/bluetooth.md)
