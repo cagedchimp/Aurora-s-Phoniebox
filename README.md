@@ -7,6 +7,7 @@ A kid-friendly RFID jukebox built on the [RPi-Jukebox-RFID](https://github.com/M
 | Part | What is in the box |
 | --- | --- |
 | Computer | Raspberry Pi 4 (to be confirmed) |
+| Software | RPi-Jukebox-RFID classic, version 2.4 (upgrade to version 3 under consideration, see docs) |
 | Audio | HiFiBerry Amp (Amp2 class, 12 to 24 V input, powers the Pi from its onboard regulator) driving two speakers |
 | RFID | USB RFID reader; NFC tags embedded in 3D-printed figures |
 | Controls | 5 GPIO push buttons |
@@ -17,3 +18,4 @@ A kid-friendly RFID jukebox built on the [RPi-Jukebox-RFID](https://github.com/M
 
 - [Battery / portability plan](docs/battery-plan.md)
 - [Bluetooth setup notes](docs/bluetooth.md)
+- [Upgrade 2.4 to version 3](docs/upgrade-to-v3.md)

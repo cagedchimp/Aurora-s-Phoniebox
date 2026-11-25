@@ -64,14 +64,18 @@ Option B. It fits the Amp's electrical needs with no extra converter, and the Ju
 
 ## 4. Safe shutdown and software
 
-The RPi-Jukebox-RFID version 3 code has a `battery_monitor` component with drivers for the INA219 and ADS1015 I2C boards. Behaviour, from the source:
+The box currently runs the **classic version 2.4**. That version has no battery monitor, so there are two routes.
 
-- Polls every 5 s and publishes state of charge, voltage, and charging state.
+### Route 1 (preferred): upgrade to version 3, use the built-in battery monitor
+
+RPi-Jukebox-RFID version 3 ships a `battery_monitor` component with drivers for the INA219 and ADS1015 I2C boards. Behaviour, from the source:
+
+- Polls every 5 s and publishes state of charge, voltage, and charging state to the web UI.
 - Below 3.3 V per cell it fires the configured `warning_action` (for example play a "battery low" sound).
 - Below 3.0 V per cell it calls the host shutdown. This threshold is hardcoded.
 - `scale_to_phy_num` / `scale_to_phy_denom` scale the measured pack voltage down to a single-cell value, so a 4S pack is reported as pack voltage divided by 4.
 
-Sketch of the config addition in `jukebox.yml`:
+Sketch of the config addition in `jukebox.yaml`:
 
 ```yaml
 modules:
@@ -84,9 +88,13 @@ battmon:
   all_clear_action:
 ```
 
-The exact scaling values need to be verified against the plugin code before use. If the box runs the classic version 2.x software, there is no built-in battery monitor and we would write a small systemd service that reads the INA219 and calls the shutdown script.
+The exact scaling values need to be verified against the plugin code before use. Version 3 also has an idle shutdown timer, which matters on battery. See [upgrade-to-v3.md](upgrade-to-v3.md) for the upgrade itself.
 
-Also worth adding: an idle timer (already in the Jukebox settings) so the box powers down after some minutes of silence instead of draining the pack overnight.
+### Route 2: stay on 2.4, add a small battery service
+
+Write a short Python systemd service that reads the INA219 over I2C every few seconds, plays a warning sound through the existing Phoniebox scripts at about 13.2 V (3.3 V per cell), and runs the Phoniebox shutdown script at 12.0 V. About 60 lines of code, no changes to the Jukebox itself. Version 2.4 has an idle shutdown option in the web settings that should be turned on as well.
+
+Either way, a hard power switch alone is not enough: cutting power without a shutdown risks SD card corruption.
 
 ## 5. Mechanical
 
@@ -129,5 +137,5 @@ Open questions about the housing, because the Printables page could not be read 
 - Must it play while charging, or is charge-then-play acceptable?
 - Comfort with soldering and lithium pack assembly?
 - Budget ceiling?
-- Which Jukebox version is installed (classic 2.x or version 3)?
+- Upgrade to version 3 before the battery work, or stay on 2.4?
 - Housing free space, or a photo of the inside.
